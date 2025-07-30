@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Lead {
+  id        String   @id @default(cuid())
+  email     String
+  phone     String
+  source    String
+  domain    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@index([createdAt])
+}
+
+model Analytics {
+  id        String   @id @default(cuid())
+  event     String
+  data      Json?
+  domain    String
+  userAgent String?
+  ip        String?
+  createdAt DateTime @default(now())
+
+  @@index([event])
+  @@index([domain])
+  @@index([createdAt])
+}
