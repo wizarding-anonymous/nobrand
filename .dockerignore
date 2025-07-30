@@ -1,0 +1,44 @@
+# Git
+.git
+.gitignore
+README.md
+
+# CI
+.github
+.gitlab-ci.yml
+.travis.yml
+
+# Docker
+docker-compose*.yml
+Dockerfile*
+
+# Development
+.next
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Testing
+coverage
+.nyc_output
+playwright-report
+test-results
+e2e
+
+# Environment
+.env
+.env.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode
+.idea
+
+# Misc
+.eslintcache
+*.log
+logs
+backups
