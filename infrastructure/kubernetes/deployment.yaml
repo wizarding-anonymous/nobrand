@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: premium-tech
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: premium-tech
+  template:
+    metadata:
+      labels:
+        app: premium-tech
+    spec:
+      containers:
+        - name: app
+          image: ghcr.io/your-repo/premium-tech:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: premium-tech-secrets
+                  key: DATABASE_URL
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 30

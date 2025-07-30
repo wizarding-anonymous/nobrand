@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: premium-tech-config
+  namespace: default
+data:
+  NEXT_PUBLIC_YANDEX_METRIKA_ID: "your_metrika_id"
+  NEXT_PUBLIC_LAUNCH_DATE: "2024-06-01T00:00:00Z"

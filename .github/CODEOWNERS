@@ -1,0 +1,21 @@
+# Default owners for everything
+* @your-github-username
+
+# Frontend
+/pages/ @frontend-team
+/components/ @frontend-team
+/styles/ @frontend-team
+
+# Backend
+/pages/api/ @backend-team
+/prisma/ @backend-team
+/utils/db.ts @backend-team
+
+# Infrastructure
+/infrastructure/ @devops-team
+/.github/ @devops-team
+/docker* @devops-team
+
+# Documentation
+*.md @documentation-team
+/docs/ @documentation-team

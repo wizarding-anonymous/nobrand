@@ -1,0 +1,50 @@
+name: Deploy to Staging
+
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  deploy:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy with Docker Compose
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.STAGING_HOST }}
+          username: ${{ secrets.STAGING_USER }}
+          key: ${{ secrets.STAGING_SSH_KEY }}
+          script: |
+            cd /var/www/premium-tech-staging
+            git pull origin develop
+            docker-compose -f infrastructure/docker/docker-compose.staging.yml pull
+            docker-compose -f infrastructure/docker/docker-compose.staging.yml up -d
+            docker-compose -f infrastructure/docker/docker-compose.staging.yml exec -T app npm run db:migrate
+
+      - name: Health check
+        run: |
+          sleep 30
+          curl -f ${{ secrets.STAGING_URL }}/api/health || exit 1
+
+      - name: Run E2E tests on staging
+        run: |
+          npm ci
+          npm run test:e2e:staging
+        env:
+          STAGING_URL: ${{ secrets.STAGING_URL }}
